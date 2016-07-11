@@ -18,21 +18,68 @@ $(document).ready(function() {
 
   var qCounter = 0;
 
-  qCreator(qCounter);
+  qCreator();
+
+  $('#next').click(function() {
+      value = $("input[type='radio']:checked").val();
+
+      if (value == undefined) {
+        $('.qSection').append('<p>Please select an answer</p>');
+        return;
+
+      } else {
+
+        userResponse.push(value);
+          qCounter++;
+          qCreator(qCounter);
+
+      }
+  });
 
     function qCreator(index) {
+      if(qCounter < questions.length) {
+          var question = questions[qCounter].question;
+          var options = questions[qCounter].responses;
+          var numOptions = questions[qCounter].responses.length;
 
-        var question = questions[qCounter].question;
-        var options = questions[qCounter].responses;
-        var numOptions = questions[qCounter].responses.length;
+          $('.questions').text(question);
 
-        $('#qSection').append('<h3>' + question + '</h3>');
+          $('.selections').find('li').remove();
 
-        var option;
-        for(var i = 0; i < numOptions; i++) {
-          option = options[i];
+          var option;
+          for(var i = 0; i < numOptions; i++) {
+            option = options[i];
 
-          $('#qSection').append('<li><input type="radio"' + option + "</li>");
+
+            $('.selections').append('<li><input type="radio" name="selections" value="' + option + '"/>' + option + "</li>");
+
+          };
+        } else {
+          displayResults(userResponse);
         };
     };
-})
+
+    function displayResults(arr) {
+      $('.questions').text('Results:')
+      $('.selections').remove();
+      for(var i = 0; i < arr.length; i++) {
+        if(arr[0] == 'Female') {
+          $('.results').append('<p>Women are four times more likely to develop varicose veins than men.</p>')
+        } else {
+          $('.results').append('<p>Studies indicate up to 56% of men will experience varicose veins in their life</p>');
+        };
+      };
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+});
